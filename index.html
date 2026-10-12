@@ -250,7 +250,7 @@
 var DATA_DIR = 'geojson_output/'; // sesuaikan kalau folder hasil pipeline beda nama/lokasi
 // Naikkan nilai ini setiap kali pipeline dijalankan ulang & file di-upload ulang, supaya browser
 // tidak memakai file lama dari cache.
-var DATA_VER = '2';
+var DATA_VER = '5';
 function dataUrl(name){return DATA_DIR+name+'?v='+DATA_VER;}
 function getJson(name){
   return fetch(dataUrl(name)).then(function(r){
@@ -366,8 +366,8 @@ getJson('crop_meta.json')
   .catch(function(e){console.error('Gagal load crop_meta.json:',e);});
 
 /* LOAD DATA 1 KABUPATEN (smooth + points), lazy & di-cache */
-function loadKabupaten(slug){
-  if(!slug)return;
+function loadKabupaten(slug,noFit){
+  if(!slug)return Promise.resolve();
   kabupatenAktif=slug;
   statusBase='';
   elKabupatenStatus.innerHTML='Memuat data…';
@@ -376,10 +376,10 @@ function loadKabupaten(slug){
   var pPoints=pointsCache[slug]?Promise.resolve(pointsCache[slug]):
     getJson('points_'+slug+'.json');
 
-  Promise.all([pSmooth,pPoints]).then(function(res){
+  return Promise.all([pSmooth,pPoints]).then(function(res){
     smoothCache[slug]=res[0];
     pointsCache[slug]=res[1];
-    fitToKabupaten(slug);
+    if(!noFit)fitToKabupaten(slug);
     refreshSmoothLayer();
     statusBase='<strong>'+labelKabupaten(slug)+'</strong>';
     renderStatus();
@@ -432,29 +432,108 @@ function buildKomOptions(){
   });
 }
 
+/* CEK TITIK DI DALAM POLIGON WILAYAH (ray casting) */
+var shapeCache={};
+function getShape(slug){
+  if(shapeCache[slug])return shapeCache[slug];
+  var c=smoothCache[slug];if(!c)return null;
+  var keys=Object.keys(c);
+  for(var i=0;i<keys.length;i++){
+    var d=c[keys[i]];
+    if(typeof d==='string')d=c[d];
+    if(d&&d.features&&d.features.length){shapeCache[slug]=d;return d;}
+  }
+  return null;
+}
+function inRing(x,y,ring){
+  var ins=false;
+  for(var i=0,j=ring.length-1;i<ring.length;j=i++){
+    var xi=ring[i][0],yi=ring[i][1],xj=ring[j][0],yj=ring[j][1];
+    if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))ins=!ins;
+  }
+  return ins;
+}
+function inPolygon(x,y,rings){
+  if(!rings.length||!inRing(x,y,rings[0]))return false;
+  for(var k=1;k<rings.length;k++){if(inRing(x,y,rings[k]))return false;}
+  return true;
+}
+function insideShape(x,y,data){
+  for(var i=0;i<data.features.length;i++){
+    var g=data.features[i].geometry;if(!g)continue;
+    if(g.type==='Polygon'){if(inPolygon(x,y,g.coordinates))return true;}
+    else if(g.type==='MultiPolygon'){
+      for(var m=0;m<g.coordinates.length;m++){if(inPolygon(x,y,g.coordinates[m]))return true;}
+    }
+  }
+  return false;
+}
+
 /* KLIK PETA -> cari titik pixel terdekat (bukan point-in-polygon grid lagi,
    karena resolusi sekarang 0.05° / ~5.5km, bukan 500m) */
-map.on('click',function(e){
-  if(!kabupatenAktif||!pointsCache[kabupatenAktif])return;
-  var pts=pointsCache[kabupatenAktif].features;
-  if(!pts.length)return;
-  var lat=e.latlng.lat,lng=e.latlng.lng,best=null,bestD=Infinity;
+var clickToken=0;
+function ensureSmooth(slug){
+  if(smoothCache[slug])return Promise.resolve(smoothCache[slug]);
+  return getJson('smooth_'+slug+'.json').then(function(d){smoothCache[slug]=d;return d;});
+}
+// Cari kabupaten/kota (di seluruh Jatim) yang poligonnya memuat titik klik. Tidak ada = laut / luar Jatim.
+function findKabupatenAt(lng,lat){
+  var tol=0.02;
+  var cand=KABUPATEN_LIST.map(function(k){return k.slug;}).filter(function(slug){
+    var b=kabBounds[slug];
+    return b&&lat>=b[0]-tol&&lat<=b[2]+tol&&lng>=b[1]-tol&&lng<=b[3]+tol;
+  });
+  if(kabupatenAktif&&cand.indexOf(kabupatenAktif)>0){ // cek kabupaten aktif lebih dulu
+    cand.splice(cand.indexOf(kabupatenAktif),1);cand.unshift(kabupatenAktif);
+  }
+  return cand.reduce(function(chain,slug){
+    return chain.then(function(found){
+      if(found)return found;
+      return ensureSmooth(slug).then(function(){
+        var sh=getShape(slug);
+        return(sh&&insideShape(lng,lat,sh))?slug:null;
+      }).catch(function(){return null;});
+    });
+  },Promise.resolve(null));
+}
+function ensurePoints(slug){
+  if(pointsCache[slug])return Promise.resolve(pointsCache[slug]);
+  return getJson('points_'+slug+'.json').then(function(d){pointsCache[slug]=d;return d;});
+}
+function showPopupText(latlng,html){
+  L.popup({maxWidth:220}).setLatLng(latlng).setContent(html).openOn(map);
+}
+function handleLandClick(slug,latlng){
+  var pts=pointsCache[slug]&&pointsCache[slug].features;
+  if(!pts||!pts.length){showPopupText(latlng,'<em style="color:#6b7280">Tidak ada data di titik ini.</em>');return;}
+  var best=null,bestD=Infinity;
   for(var i=0;i<pts.length;i++){
     var c=pts[i].geometry.coordinates; // [lon,lat]
-    var dx=c[0]-lng,dy=c[1]-lat,d=dx*dx+dy*dy;
+    var dx=c[0]-latlng.lng,dy=c[1]-latlng.lat,d=dx*dx+dy*dy;
     if(d<bestD){bestD=d;best=pts[i];}
   }
-  // Batas jarak: grid ~0.05° (~5,5 km). Klik yang terlalu jauh dari titik grid
-  // (mis. di laut atau di luar kabupaten terpilih) tidak diberi rekomendasi.
-  var MAX_DEG=0.06;
-  if(!best||bestD>MAX_DEG*MAX_DEG){
-    L.popup({maxWidth:220}).setLatLng(e.latlng)
-      .setContent('<em style="color:#6b7280">Di luar wilayah '+labelKabupaten(kabupatenAktif)+
-        '. Klik di dalam area kabupaten/kota yang dipilih.</em>')
-      .openOn(map);
-    return;
+  onPointClick(best,latlng);
+}
+/* KLIK PETA: berlaku untuk seluruh daratan Jatim. Titik di luar kabupaten aktif -> rekomendasi diambil
+   dari kabupaten yang memuat titik itu (dropdown tidak berubah). Klik di laut / luar Jatim -> tidak diberi rekomendasi. */
+map.on('click',function(e){
+  var lat=e.latlng.lat,lng=e.latlng.lng,token=++clickToken;
+  if(kabupatenAktif&&pointsCache[kabupatenAktif]){
+    var sh=getShape(kabupatenAktif);
+    if(sh&&insideShape(lng,lat,sh)){handleLandClick(kabupatenAktif,e.latlng);return;}
   }
-  onPointClick(best,e.latlng);
+  findKabupatenAt(lng,lat).then(function(slug){
+    if(token!==clickToken)return; // ada klik yang lebih baru
+    if(!slug){
+      showPopupText(e.latlng,'<em style="color:#6b7280">Titik ini berada di laut / di luar daratan Jawa Timur.</em>');
+      return;
+    }
+    // Dropdown & layer warna TIDAK diubah; cukup ambil titik data kabupaten itu untuk rekomendasi.
+    return ensurePoints(slug).then(function(){
+      if(token!==clickToken)return;
+      handleLandClick(slug,e.latlng);
+    });
+  });
 });
 
 function onPointClick(feat,latlng){
