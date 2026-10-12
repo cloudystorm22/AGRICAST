@@ -250,7 +250,7 @@
 var DATA_DIR = 'geojson_output/'; // sesuaikan kalau folder hasil pipeline beda nama/lokasi
 // Naikkan nilai ini setiap kali pipeline dijalankan ulang & file di-upload ulang, supaya browser
 // tidak memakai file lama dari cache.
-var DATA_VER = '1';
+var DATA_VER = '2';
 function dataUrl(name){return DATA_DIR+name+'?v='+DATA_VER;}
 function getJson(name){
   return fetch(dataUrl(name)).then(function(r){
@@ -444,7 +444,17 @@ map.on('click',function(e){
     var dx=c[0]-lng,dy=c[1]-lat,d=dx*dx+dy*dy;
     if(d<bestD){bestD=d;best=pts[i];}
   }
-  if(best)onPointClick(best,e.latlng);
+  // Batas jarak: grid ~0.05° (~5,5 km). Klik yang terlalu jauh dari titik grid
+  // (mis. di laut atau di luar kabupaten terpilih) tidak diberi rekomendasi.
+  var MAX_DEG=0.06;
+  if(!best||bestD>MAX_DEG*MAX_DEG){
+    L.popup({maxWidth:220}).setLatLng(e.latlng)
+      .setContent('<em style="color:#6b7280">Di luar wilayah '+labelKabupaten(kabupatenAktif)+
+        '. Klik di dalam area kabupaten/kota yang dipilih.</em>')
+      .openOn(map);
+    return;
+  }
+  onPointClick(best,e.latlng);
 });
 
 function onPointClick(feat,latlng){
