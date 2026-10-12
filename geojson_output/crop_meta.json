@@ -1,0 +1,287 @@
+{
+  "karet": {
+    "nama": "Karet",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Perkebunan"
+  },
+  "kelapa": {
+    "nama": "Kelapa",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Perkebunan"
+  },
+  "kelapasawit": {
+    "nama": "Kelapa sawit",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Perkebunan"
+  },
+  "kakao": {
+    "nama": "Kakao",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Perkebunan"
+  },
+  "teh": {
+    "nama": "Teh",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Perkebunan"
+  },
+  "pala": {
+    "nama": "Pala",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Perkebunan"
+  },
+  "cengkeh": {
+    "nama": "Cengkeh",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Perkebunan"
+  },
+  "gulatebu": {
+    "nama": "Gula tebu",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Perkebunan"
+  },
+  "tembakau": {
+    "nama": "Tembakau",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Perkebunan"
+  },
+  "bawangmerah": {
+    "nama": "Bawang Merah",
+    "kategori_waktu": "musiman",
+    "kelompok": "Sayuran & Buah Semusim"
+  },
+  "bawangputih": {
+    "nama": "Bawang Putih",
+    "kategori_waktu": "musiman",
+    "kelompok": "Sayuran & Buah Semusim"
+  },
+  "bayam": {
+    "nama": "Bayam",
+    "kategori_waktu": "musiman",
+    "kelompok": "Sayuran & Buah Semusim"
+  },
+  "buncis": {
+    "nama": "Buncis",
+    "kategori_waktu": "musiman",
+    "kelompok": "Sayuran & Buah Semusim"
+  },
+  "kacangpanjang": {
+    "nama": "Kacang Panjang",
+    "kategori_waktu": "musiman",
+    "kelompok": "Sayuran & Buah Semusim"
+  },
+  "kentang": {
+    "nama": "Kentang",
+    "kategori_waktu": "musiman",
+    "kelompok": "Sayuran & Buah Semusim"
+  },
+  "kubis": {
+    "nama": "Kubis",
+    "kategori_waktu": "musiman",
+    "kelompok": "Sayuran & Buah Semusim"
+  },
+  "melon": {
+    "nama": "Melon",
+    "kategori_waktu": "musiman",
+    "kelompok": "Sayuran & Buah Semusim"
+  },
+  "paprika": {
+    "nama": "Paprika",
+    "kategori_waktu": "musiman",
+    "kelompok": "Sayuran & Buah Semusim"
+  },
+  "semangka": {
+    "nama": "Semangka",
+    "kategori_waktu": "musiman",
+    "kelompok": "Sayuran & Buah Semusim"
+  },
+  "terung": {
+    "nama": "Terung",
+    "kategori_waktu": "musiman",
+    "kelompok": "Sayuran & Buah Semusim"
+  },
+  "wortel": {
+    "nama": "Wortel",
+    "kategori_waktu": "musiman",
+    "kelompok": "Sayuran & Buah Semusim"
+  },
+  "jahe": {
+    "nama": "Jahe",
+    "kategori_waktu": "musiman",
+    "kelompok": "Biofarmaka"
+  },
+  "kapulaga": {
+    "nama": "Kapulaga",
+    "kategori_waktu": "musiman",
+    "kelompok": "Biofarmaka"
+  },
+  "kencur": {
+    "nama": "Kencur",
+    "kategori_waktu": "musiman",
+    "kelompok": "Biofarmaka"
+  },
+  "kunyit": {
+    "nama": "Kunyit",
+    "kategori_waktu": "musiman",
+    "kelompok": "Biofarmaka"
+  },
+  "laoslengkuas": {
+    "nama": "Laos/Lengkuas",
+    "kategori_waktu": "musiman",
+    "kelompok": "Biofarmaka"
+  },
+  "jeruknipis": {
+    "nama": "Jeruk Nipis",
+    "kategori_waktu": "musiman",
+    "kelompok": "Biofarmaka"
+  },
+  "serai": {
+    "nama": "Serai",
+    "kategori_waktu": "musiman",
+    "kelompok": "Biofarmaka"
+  },
+  "mawar": {
+    "nama": "Mawar",
+    "kategori_waktu": "musiman",
+    "kelompok": "Tanaman Hias"
+  },
+  "pisangpisangan": {
+    "nama": "Pisang-Pisangan",
+    "kategori_waktu": "musiman",
+    "kelompok": "Tanaman Hias"
+  },
+  "sedapmalam": {
+    "nama": "Sedap Malam",
+    "kategori_waktu": "musiman",
+    "kelompok": "Tanaman Hias"
+  },
+  "alpukat": {
+    "nama": "Alpukat",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "anggur": {
+    "nama": "Anggur",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "apel": {
+    "nama": "Apel",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "belimbing": {
+    "nama": "Belimbing",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "dukulangsatkokosan": {
+    "nama": "Duku/Langsat/Kokosan",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "durian": {
+    "nama": "Durian",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "jambubiji": {
+    "nama": "Jambu Biji",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "jerukbesar": {
+    "nama": "Jeruk Besar",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "jeruksiamkeprok": {
+    "nama": "Jeruk Siam/Keprok",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "mangga": {
+    "nama": "Mangga",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "manggis": {
+    "nama": "Manggis",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "melinjo": {
+    "nama": "Melinjo",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "nenas": {
+    "nama": "Nenas",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "pepaya": {
+    "nama": "Pepaya",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "petai": {
+    "nama": "Petai",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "pisang": {
+    "nama": "Pisang",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "rambutan": {
+    "nama": "Rambutan",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "salak": {
+    "nama": "Salak",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "sawo": {
+    "nama": "Sawo",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "sirsak": {
+    "nama": "Sirsak",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "sukun": {
+    "nama": "Sukun",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "jeruklemon": {
+    "nama": "Jeruk Lemon",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  },
+  "jambumete": {
+    "nama": "Jambu mete",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Perkebunan"
+  },
+  "ketimun": {
+    "nama": "Ketimun",
+    "kategori_waktu": "musiman",
+    "kelompok": "Sayuran & Buah Semusim"
+  },
+  "stroberi": {
+    "nama": "Stroberi",
+    "kategori_waktu": "musiman",
+    "kelompok": "Sayuran & Buah Semusim"
+  },
+  "lengkeng": {
+    "nama": "Lengkeng",
+    "kategori_waktu": "tahunan",
+    "kelompok": "Buah & Sayur Tahunan"
+  }
+}
